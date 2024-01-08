@@ -53,26 +53,32 @@ const modalInscription = document.getElementById("ModalInscription");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const formData = document.querySelectorAll(".formData");
 const modalBtnClose = document.querySelectorAll(".close"); // Sélectionnez le bouton de fermeture
+const confirmationBtnClose = document.getElementById("btnFermer");
 //const radios = document.getElementsByName('location');//radio botton
 
 
 modalBtnClose.forEach((btn) => btn.addEventListener("click", closeModal));
 
+
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
+confirmationBtnClose.addEventListener("click",closeModal);
 // launch modal form
 function launchModal() {
   modalInscription.style.display = "block";
 }
 
+function closeModal(){
+  this.closest('.bground').style.display = "none";//chercher le premier occurence de parent de classe bground
+}
 //attach event
 //modalBtnClose.addEventListener("click", closeModal);
 
 // close modal form
-function closeModal() {
+/* function closeModal() {
   this.parentElement.style.display = "none";
-}
+} */
 
 function submitData(event){
   let isValid=validateForm(event);
@@ -80,10 +86,11 @@ function submitData(event){
     const monDiv = document.getElementById('modalConfirmation');
     monDiv.style.display = "block";
     modalInscription.style.display = "none";
-    //closeModal();
-    event.preventDefault();
+    event.preventDefault();//pour eviter le chargement de la page
+    document.getElementById('inscriptionForm').reset();//pour effacer les données de formulaire une fois les données sont envoyées
   }
 }
+
 function validateForm(event) {
 
   const formDataEntries = document.querySelectorAll(".formData");
