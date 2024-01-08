@@ -68,6 +68,8 @@ img {
   display: none;
 }
 
+
+
 @media screen and (max-width: 768px) {
   .topnav a {display: none;}
   .topnav a.icon {
@@ -208,7 +210,7 @@ input {
   font-size: 20px;
   height: 48px;
 }
-.formData[data-error]::after {
+.formData[data-error]::after{
   content: attr(data-error);
   font-size: 0.4em;
   color: #e54858;
@@ -220,10 +222,11 @@ input {
   opacity: 0;
   transition: 0.3s;
 }
-.formData[data-error-visible="true"]::after {
+
+.formData[data-error-visible="true"]::after{
   opacity: 1;
 }
-.formData[data-error-visible="true"] .text-control {
+.formData[data-error-visible="true"] .text-control{
   border: 2px solid #e54858;
 }
 /* 
@@ -232,6 +235,33 @@ input[data-error]::after {
     font-size: 0.4em;
     color: red;
 } */
+.messageMerci{
+  font-size: 36px;
+  color: white;
+  margin-bottom: 110px;
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: end;
+  height: 90%;
+}
+#modalConfirmation{
+  height: 850px;
+  
+}
+.containerModal{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  
+
+}
+#btnFermer{
+  margin-top: 200px;
+  margin-bottom: 25px;
+}
+
 .checkbox-label,
 .checkbox2-label {
   position: relative;

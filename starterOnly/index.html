@@ -52,7 +52,7 @@
         </button>
       </div>
 
-      <div class="bground">
+      <div class="bground" id="ModalInscription">
         <div class="content">
           <span class="close"></span>
           <div class="modal-body">
@@ -60,68 +60,78 @@
               name="reserve"
               action="index.html"
               method="get"
-              onsubmit="return validate();"
+              onsubmit="javascript:submitData(event);"
             >
-              <div
-                class="formData">
-                <label>Prénom</label><br>
+              <div class="formData" data-fieldtype="prenomField" data-error="Ce champ doit avoir au moins 2 caractères." data-error-visible="false">
+                <label for="first" id="prenomLabel">Prénom</label><br>
                 <input
                   class="text-control"
                   type="text"
                   id="first"
                   name="first"
-                  minlength="2"
                 /><br>
-              </div>
-              <div
-                class="formData">
-                <label>Nom</label><br>
+                
+              </div> 
+             <div
+                class="formData" data-fieldtype="nomField" data-error="Ce champ doit avoir au moins 2 caractères.">
+                <label for="last" id="nomLabel">Nom</label><br>
                 <input
                   class="text-control"
                   type="text"
                   id="last"
                   name="last"
                 /><br>
-              </div>
+                
+              </div> 
               <div
-                class="formData">
-                <label>E-mail</label><br>
+                class="formData" data-fieldtype="emailField" data-error="Veuillez saisir une adresse e-mail valide." data-error-visible="false">
+                <label for="email">E-mail</label><br>
                 <input
                   class="text-control"
-                  type="email"
+                  type="text"
                   id="email"
                   name="email"
                 /><br>
+                
               </div>
               <div
-                class="formData">
-                <label>Date de naissance</label><br>
+                class="formData" data-fieldtype="birthdateField" data-error="Vous devez entrer votre date de naissance." data-error-visible="false">
+                <label for="birthdate">Date de naissance</label><br>
                 <input
                   class="text-control"
                   type="date"
                   id="birthdate"
                   name="birthdate"
                 /><br>
+                
               </div>
               <div
-                class="formData">
+                class="formData" data-fieldtype="tournoisField" data-error="Vous devez entrer le nombre de tournois auquels vous avez participé." data-error-visible="false">
                 <label>À combien de tournois GameOn avez-vous déjà participé ?</label><br>
-                <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
+                <input 
+                type="number" 
+                class="text-control" 
+                id="quantity" 
+                name="quantity" 
+                min="0" 
+                max="99" 
+                /><br>
+               
               </div>
-              <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
+             <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
               <div
-                class="formData">
+                class="formData" data-fieldtype="locationField" data-error="Vous devez choisir une option." data-error-visible="false">
                 <input
                   class="checkbox-input"
                   type="radio"
                   id="location1"
                   name="location"
                   value="New York"
+                  
                 />
                 <label class="checkbox-label" for="location1">
                   <span class="checkbox-icon"></span>
-                  New York</label
-                >
+                  New York</label>
                 <input
                   class="checkbox-input"
                   type="radio"
@@ -178,16 +188,17 @@
                   Portland</label
                 >
               </div>
-
+             
               <div
-                class="formData">
+                class="formData" data-fieldtype="termesField" data-error="Les termes sont obligatoires." data-error-visible="false">
                 <input
                   class="checkbox-input"
                   type="checkbox"
                   id="checkbox1"
                   checked
+                  
                 />
-                <label class="checkbox2-label" for="checkbox1" required>
+                <label class="checkbox2-label" for="checkbox1">
                   <span class="checkbox-icon"></span>
                   J'ai lu et accepté les conditions d'utilisation.
                 </label>
@@ -206,6 +217,22 @@
                 value="C'est parti"
               />
             </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="bground" id="modalConfirmation">
+        <div class="content" >
+          <span class="close"></span>
+          <div class="modal-body containerModal">
+            <span class="messageMerci"> Merci pour<br>votre inscription</span>
+            <input
+                    class="btn-submit"
+                    id="btnFermer"
+                    type="submit"
+                    class="button"
+                    value="Fermer"
+                  />
           </div>
         </div>
       </div>
