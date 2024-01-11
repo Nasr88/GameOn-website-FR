@@ -1,96 +1,76 @@
+// DOM Elements
+const modalInscription = document.getElementById("ModalInscription");
+const modalBtn = document.querySelectorAll(".modal-btn");
+const modalBtnClose = document.querySelectorAll(".close"); // Sélectionnez le bouton de fermeture
+const confirmationBtnClose = document.getElementById("btnFermer");
+
+//les fonctions:
+// rendre navbar responsive
 function editNav() {
   var x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
+  /* if (x.className === "topnav") {
     x.className += " responsive";
   } else {
     x.className = "topnav";
-  }
+  } */
+  x.classList.toggle("responsive");//classe interrupteur
 }
+//vérifier si une personne a plus de 18 ans
 function checkAge() {
   // Récupérer la valeur de la date de naissance depuis l'input
   const inputDate = document.getElementById('birthdate');
-  const dateNaissance = new Date(inputDate.value);//la chager en date
+  const dateNaissance = new Date(inputDate.value);
 
   // Obtenir la date actuelle
   const dateActuelle = new Date();
 
-  // Calculer la différence entre les années
+  // Calculer la différence en années entre la date actuelle et la date de naissance
   const differenceAnnees = dateActuelle.getFullYear() - dateNaissance.getFullYear();
 
-  // Vérifier si la personne a plus de 18 ans
-  if (differenceAnnees > 18) {
-      return true;
-  } else if (differenceAnnees === 18) {
-      // Vérifier également les mois si la personne a exactement 18 ans
-      const moisActuel = dateActuelle.getMonth();
-      const moisNaissance = dateNaissance.getMonth();
-      if (moisActuel > moisNaissance) {
-         
-          return true;
-      } else if (moisActuel === moisNaissance) {
-          const jourActuel = dateActuelle.getDate();
-          const jourNaissance = dateNaissance.getDate();
-          if (jourActuel >= jourNaissance) {
-              
-              return true;
-          } else {
-              
-              return false;
-          }
-      } else {
-         
-          return false;
-      }
+  // Vérifier si la personne a plus de 18 ans en tenant compte des mois et jours
+  if (differenceAnnees > 18 || 
+      (differenceAnnees === 18 && 
+      (dateActuelle.getMonth() > dateNaissance.getMonth() || 
+      (dateActuelle.getMonth() === dateNaissance.getMonth() && 
+      dateActuelle.getDate() >= dateNaissance.getDate())))) {
+    return true;
   } else {
-      
-      return false;
+    return false;
   }
 }
-
-// DOM Elements
-//const modalbg = document.querySelector(".bground");
-const modalInscription = document.getElementById("ModalInscription");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const formData = document.querySelectorAll(".formData");
-const modalBtnClose = document.querySelectorAll(".close"); // Sélectionnez le bouton de fermeture
-const confirmationBtnClose = document.getElementById("btnFermer");
-//const radios = document.getElementsByName('location');//radio botton
-
-
-modalBtnClose.forEach((btn) => btn.addEventListener("click", closeModal));
-
-
-// launch modal event
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-
-confirmationBtnClose.addEventListener("click",closeModal);
-// launch modal form
+//afficher Modale d'inscription
 function launchModal() {
   modalInscription.style.display = "block";
 }
-
+//fermer les modales de classe bground
 function closeModal(){
   this.closest('.bground').style.display = "none";//chercher le premier occurence de parent de classe bground
 }
-//attach event
-//modalBtnClose.addEventListener("click", closeModal);
-
-// close modal form
-/* function closeModal() {
-  this.parentElement.style.display = "none";
-} */
 
 function submitData(event){
   let isValid=validateForm(event);
   if (isValid){
     const monDiv = document.getElementById('modalConfirmation');
-    monDiv.style.display = "block";
-    modalInscription.style.display = "none";
+    monDiv.style.display = "block";//afficher la modale de confirmation
+    modalInscription.style.display = "none";//cacher la modale d'inscription
     event.preventDefault();//pour eviter le chargement de la page
     document.getElementById('inscriptionForm').reset();//pour effacer les données de formulaire une fois les données sont envoyées
   }
 }
 
+//Fermer avec la croix close
+modalBtnClose.forEach((btn) => btn.addEventListener("click", closeModal));
+//lancer Modale d'inscription
+modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+//Fermer avec le bouton Fermer
+confirmationBtnClose.addEventListener("click",closeModal);
+//Pour réinitialiser les données de formulaire une fois validé
+modalInscription.addEventListener("submit", function(event) {
+  submitData(event);
+});
+
+
+//Valider le formulaire
 function validateForm(event) {
 
   const formDataEntries = document.querySelectorAll(".formData");
@@ -100,10 +80,9 @@ function validateForm(event) {
     const inputField = formDataEntry.querySelector(".text-control");
     //const errorDiv = formDataEntry.querySelector(".errorMessage");
     const errorType = formDataEntry.getAttribute("data-fieldtype");
-  //console.log(errorType);
+    //console.log(errorType);
     if (inputField) {
       const inputValue = inputField.value.trim();
-
       if (errorType === "emailField") {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(inputValue)) {
@@ -120,16 +99,10 @@ function validateForm(event) {
           inputField.parentElement.setAttribute("data-error-visible", "false");
         }
       } else if (errorType === "birthdateField") {
-
-       // const birthdateField = document.getElementById('birthdate');// Récupérer le champ de date de naissance
   
-       // const birthdateValue = new Date(birthdateField.value); // Récupération de la date de naissance
-        
-  
-  // Vérifier l'âge en utilisant checkAge()
-  const isOver18 = checkAge();
+   // Vérifier l'âge en utilisant checkAge()
+   const isOver18 = checkAge();
    // Si l'âge est inférieur à 18, afficher une erreur
- 
    console.log(inputValue);
         if (inputValue===""){
           inputField.parentElement.setAttribute("data-error-visible", "true");
