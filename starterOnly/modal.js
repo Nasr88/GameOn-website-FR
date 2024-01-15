@@ -88,7 +88,7 @@ function submitData(event){
     const monDiv = document.getElementById('modalConfirmation');
     monDiv.style.display = "block";//afficher la modale de confirmation
     modalInscription.style.display = "none";//cacher la modale d'inscription
-    event.preventDefault();//pour eviter le chargement de la page
+    event.preventDefault();//pour eviter le chargement de la page sinon la modale confirmation se ferme
     document.getElementById('inscriptionForm').reset();//pour effacer les données de formulaire une fois les données sont envoyées
   }
 }
@@ -104,7 +104,7 @@ function validateForm(event) {
     const fieldType = formDataEntry.getAttribute("data-fieldtype");
     //console.log(fieldType);
     if (inputField) {
-      const inputValue = inputField.value.trim();//enlever les espaces
+      const inputValue = inputField.value.trim();//enlever les espaces 
       if (fieldType === "emailField") {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(inputValue)) {
