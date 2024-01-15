@@ -3,11 +3,23 @@ const modalInscription = document.getElementById("ModalInscription");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const modalBtnClose = document.querySelectorAll(".close"); // Sélectionnez le bouton de fermeture
 const confirmationBtnClose = document.getElementById("btnFermer");
+const formDataEntries = document.querySelectorAll(".formData");
+
+//lancer Modale d'inscription
+modalBtn.forEach(btn => btn.addEventListener("click", launchModal));
+//Fermer avec la croix close
+modalBtnClose.forEach(btn => btn.addEventListener("click", closeModal));
+//Fermer avec le bouton Fermer
+confirmationBtnClose.addEventListener("click",closeModal);
+//Pour réinitialiser les données de formulaire une fois validé
+modalInscription.addEventListener("submit", function(event) {
+  submitData(event);
+});
 
 //les fonctions:
 // rendre navbar responsive
 function editNav() {
-  var x = document.getElementById("myTopnav");
+  const x = document.getElementById("myTopnav");
   /* if (x.className === "topnav") {
     x.className += " responsive";
   } else {
@@ -19,23 +31,41 @@ function editNav() {
 function checkAge() {
   // Récupérer la valeur de la date de naissance depuis l'input
   const inputDate = document.getElementById('birthdate');
-  const dateNaissance = new Date(inputDate.value);
+  const dateNaissance = new Date(inputDate.value);//la changer en date
 
   // Obtenir la date actuelle
   const dateActuelle = new Date();
 
-  // Calculer la différence en années entre la date actuelle et la date de naissance
+  // Calculer la différence entre les années
   const differenceAnnees = dateActuelle.getFullYear() - dateNaissance.getFullYear();
 
-  // Vérifier si la personne a plus de 18 ans en tenant compte des mois et jours
-  if (differenceAnnees > 18 || 
-      (differenceAnnees === 18 && 
-      (dateActuelle.getMonth() > dateNaissance.getMonth() || 
-      (dateActuelle.getMonth() === dateNaissance.getMonth() && 
-      dateActuelle.getDate() >= dateNaissance.getDate())))) {
-    return true;
+  // Vérifier si la personne a plus de 18 ans
+  if (differenceAnnees > 18) {
+      return true;
+  } else if (differenceAnnees === 18) {
+      // Vérifier également les mois si la personne a exactement 18 ans
+      const moisActuel = dateActuelle.getMonth();
+      const moisNaissance = dateNaissance.getMonth();
+      if (moisActuel > moisNaissance) {
+
+          return true;
+      } else if (moisActuel === moisNaissance) {
+          const jourActuel = dateActuelle.getDate();
+          const jourNaissance = dateNaissance.getDate();
+          if (jourActuel >= jourNaissance) {
+
+              return true;
+          } else {
+
+              return false;
+          }
+      } else {
+
+          return false;
+      }
   } else {
-    return false;
+
+      return false;
   }
 }
 //afficher Modale d'inscription
@@ -45,6 +75,10 @@ function launchModal() {
 //fermer les modales de classe bground
 function closeModal(){
   this.closest('.bground').style.display = "none";//chercher le premier occurence de parent de classe bground
+  //Effacer les messages d'erreur déjà affichés fi on ferme avec la croix
+  formDataEntries.forEach(element => {
+    element.setAttribute("data-error-visible", "false");
+  });
 }
 
 function submitData(event){
@@ -58,22 +92,12 @@ function submitData(event){
   }
 }
 
-//Fermer avec la croix close
-modalBtnClose.forEach((btn) => btn.addEventListener("click", closeModal));
-//lancer Modale d'inscription
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-//Fermer avec le bouton Fermer
-confirmationBtnClose.addEventListener("click",closeModal);
-//Pour réinitialiser les données de formulaire une fois validé
-modalInscription.addEventListener("submit", function(event) {
-  submitData(event);
-});
 
 
 //Valider le formulaire
 function validateForm(event) {
 
-  const formDataEntries = document.querySelectorAll(".formData");
+  
   let formIsValid = true;
 
   formDataEntries.forEach((formDataEntry) => {
@@ -82,7 +106,7 @@ function validateForm(event) {
     const errorType = formDataEntry.getAttribute("data-fieldtype");
     //console.log(errorType);
     if (inputField) {
-      const inputValue = inputField.value.trim();
+      const inputValue = inputField.value.trim();//enlever les espaces
       if (errorType === "emailField") {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailPattern.test(inputValue)) {
@@ -92,7 +116,9 @@ function validateForm(event) {
           inputField.parentElement.setAttribute("data-error-visible", "false");
         }
       } else if (errorType === "nomField" || errorType === "prenomField") {
-        if (!inputValue || inputValue.length < 2) {
+        const namePattern = /^[a-zA-Z\u00C0-\u00FF ]+$/u; //regex langue française sans carectères spéciaux
+        if (!inputValue || inputValue.length < 2 || !namePattern.test(inputValue)){
+          inputField.parentElement.setAttribute("data-error", "Vous devez entrer des caractères valides");
           inputField.parentElement.setAttribute("data-error-visible", "true");
           formIsValid = false;
         } else {
@@ -109,6 +135,7 @@ function validateForm(event) {
           formIsValid = false;
         }else if (!isOver18) {
           inputField.parentElement.setAttribute("data-error", "Vous devez avoir au minimun 18ans");
+          inputField.parentElement.setAttribute("data-error-visible", "true");
           formIsValid = false;
         } 
         else {
@@ -119,7 +146,11 @@ function validateForm(event) {
         if (!inputValue) {
           inputField.parentElement.setAttribute("data-error-visible", "true");
           formIsValid = false;
-        } else {
+        } else if((parseInt(inputValue)>=100)||(parseInt(inputValue)<0)){
+          inputField.parentElement.setAttribute("data-error", "Vous devez entrer un chiffre compris entre 0 et 99");
+          inputField.parentElement.setAttribute("data-error-visible", "true");
+        }
+        else {
           inputField.parentElement.setAttribute("data-error-visible", "false");
         }
       }
@@ -157,21 +188,14 @@ function validateForm(event) {
         } else {
           termesField.setAttribute("data-error-visible", "false");
         }
-          
-        
 
         }
       
     }
   });
 
-
-
-
   if (!formIsValid) {
-  
-
-    event.preventDefault();
+    event.preventDefault();//pour empecher le chargement de la page
     return false;
   }
  
